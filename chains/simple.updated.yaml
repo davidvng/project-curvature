@@ -1,0 +1,122 @@
+theory:
+  classy:
+    path: null
+    speed: 0.2
+    stop_at_error: false
+    extra_args:
+      non linear: hmcode
+      hmcode_min_k_max: 20
+      N_ncdm: 1
+      N_ur: 2.0328
+    use_renames: false
+    renames:
+      As: A_s
+      ns: n_s
+      nrun: alpha_s
+      nrunrun: beta_s
+      nt: n_t
+      ntrun: alpha_t
+      rdrag: rs_drag
+      omegak: Omega_k
+      omegal: Omega_Lambda
+      w: w0_fld
+      wa: wa_fld
+      omegabh2: omega_b
+      omegab: Omega_b
+      omegach2: omega_cdm
+      omegac: Omega_cdm
+      omegam: Omega_m
+      omegan: Omega_nu
+      tau: tau_reio
+      zrei: z_reio
+      deltazrei: reionization_width
+      helium_redshift: helium_fullreio_redshift
+      helium_delta_redshift: helium_fullreio_width
+      yhe: YHe
+      yheused: YHe
+    version: v2.9.3
+    input_params:
+    - omega_b
+    output_params:
+    - H0
+likelihood:
+  planck_2018_lowl.TT:
+    path: null
+    clik_file: baseline/plc_3.0/low_l/commander/commander_dx12_v3_2_29.clik
+    product_id: '151902'
+    aliases:
+    - lowl
+    speed: 3000
+    type: CMB
+    stop_at_error: false
+    version: null
+    input_params:
+    - A_planck
+    output_params: []
+params:
+  H0:
+    latex: H_0
+    derived: true
+  omega_b:
+    prior:
+      min: 0.005
+      max: 0.1
+    ref:
+      dist: norm
+      loc: 0.0224
+      scale: 0.0001
+    proposal: 0.0001
+    latex: \Omega_\mathrm{b} h^2
+    renames:
+    - omegabh2
+  A_planck:
+    prior:
+      dist: norm
+      loc: 1
+      scale: 0.0025
+    ref:
+      dist: norm
+      loc: 1
+      scale: 0.002
+    proposal: 0.0005
+    latex: y_\mathrm{cal}
+    renames: calPlanck
+  chi2__CMB:
+    latex: \chi^2_\mathrm{CMB}
+    derived: true
+sampler:
+  mcmc:
+    burn_in: 0
+    max_tries: 40d
+    covmat: auto
+    covmat_params: null
+    proposal_scale: 1.9
+    output_every: 60s
+    learn_every: 40d
+    learn_proposal: true
+    learn_proposal_Rminus1_max: 2.0
+    learn_proposal_Rminus1_max_early: 30.0
+    learn_proposal_Rminus1_min: 0.0
+    max_samples: .inf
+    Rminus1_stop: 0.01
+    Rminus1_cl_stop: 0.2
+    Rminus1_cl_level: 0.68
+    Rminus1_single_split: 4
+    measure_speeds: true
+    oversample_power: 0.4
+    oversample_thin: true
+    drag: true
+    blocking:
+    - - 1
+      - - omega_b
+    - - 45
+      - - A_planck
+    callback_function: null
+    callback_every: null
+    seed: null
+    check_every: null
+    oversample: null
+    drag_limits: null
+    version: '3.0'
+output: simple
+version: '3.0'
