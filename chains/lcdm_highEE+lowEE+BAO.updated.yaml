@@ -4,10 +4,10 @@ theory:
     speed: 0.2
     stop_at_error: false
     extra_args:
+      non linear: hmcode
+      hmcode_min_k_max: 20
       N_ncdm: 1
       N_ur: 2.0328
-      hmcode_min_k_max: 20
-      non linear: hmcode
     use_renames: false
     renames:
       As: A_s
@@ -36,23 +36,85 @@ theory:
       yheused: YHe
     version: v2.9.3
     input_params:
-    - 100*theta_s
     - A_s
-    - m_ncdm
     - n_s
+    - 100*theta_s
     - omega_b
     - omega_cdm
+    - m_ncdm
     - tau_reio
     output_params:
     - H0
-    - Omega_Lambda
     - Omega_m
+    - Omega_Lambda
     - YHe
+    - z_reio
+    - sigma8
     - age
     - rs_drag
-    - sigma8
-    - z_reio
 likelihood:
+  bao.sixdf_2011_bao:
+    path: null
+    rs_rescale: 1.027369826
+    data:
+    - 0.106
+    - 0.336
+    - 0.015
+    - rs_over_DV
+    aliases:
+    - BAO
+    speed: 5000
+    type: BAO
+    stop_at_error: false
+    version: null
+    input_params: []
+    output_params: []
+  bao.sdss_dr7_mgs:
+    path: null
+    prob_dist: bao_data/sdss_MGS_prob.txt
+    prob_dist_bounds:
+    - 0.8005
+    - 1.1985
+    rs_rescale: 4.29720761315
+    data:
+    - 0.15
+    - 4.465666824
+    - 0.1681350461
+    - DV_over_rs
+    aliases:
+    - BAO
+    speed: 5000
+    type: BAO
+    stop_at_error: false
+    version: null
+    input_params: []
+    output_params: []
+  bao.sdss_dr12_consensus_bao:
+    path: null
+    measurements_file: bao_data/sdss_DR12Consensus_bao.dat
+    cov_file: bao_data/BAO_consensus_covtot_dM_Hz.txt
+    rs_fid: 147.78
+    aliases:
+    - BAO
+    speed: 2000
+    type: BAO
+    stop_at_error: false
+    version: null
+    input_params: []
+    output_params: []
+  planck_2018_lowl.EE:
+    path: null
+    clik_file: baseline/plc_3.0/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik
+    product_id: '151902'
+    aliases:
+    - lowE
+    speed: 4000
+    type: CMB
+    stop_at_error: false
+    version: null
+    input_params:
+    - A_planck
+    output_params: []
   planck_2018_highl_plik.EE:
     path: null
     clik_file: extended_plik/plc_3.0/hi_l/plik/plik_rd12_HM_v22_EE.clik
@@ -86,155 +148,142 @@ likelihood:
     - A_sbpx_143_217_EE
     - A_sbpx_217_217_EE
     output_params: []
-  planck_2018_lowl.EE:
-    path: null
-    clik_file: baseline/plc_3.0/low_l/simall/simall_100x143_offlike5_EE_Aplanck_B.clik
-    product_id: '151902'
-    aliases:
-    - lowE
-    speed: 4000
-    type: CMB
-    stop_at_error: false
-    version: null
-    input_params:
-    - A_planck
-    output_params: []
 params:
-  100*theta_s:
-    derived: false
-    value: 'lambda theta_s_1e2: theta_s_1e2'
-  A:
-    derived: 'lambda A_s: 1e9*A_s'
-    latex: 10^9 A_\mathrm{s}
+  logA:
+    prior:
+      min: 1.61
+      max: 3.91
+    ref:
+      dist: norm
+      loc: 3.05
+      scale: 0.001
+    proposal: 0.001
+    latex: \log(10^{10} A_\mathrm{s})
+    drop: true
   A_s:
-    latex: A_\mathrm{s}
     value: 'lambda logA: 1e-10*np.exp(logA)'
+    latex: A_\mathrm{s}
     derived: 'lambda A_s: A_s'
     renames:
     - As
+  n_s:
+    prior:
+      min: 0.8
+      max: 1.2
+    ref:
+      dist: norm
+      loc: 0.965
+      scale: 0.004
+    proposal: 0.002
+    latex: n_\mathrm{s}
+    renames:
+    - ns
+  theta_s_1e2:
+    prior:
+      min: 0.5
+      max: 10
+    ref:
+      dist: norm
+      loc: 1.0416
+      scale: 0.0004
+    proposal: 0.0002
+    latex: 100\theta_\mathrm{s}
+    drop: true
+  100*theta_s:
+    value: 'lambda theta_s_1e2: theta_s_1e2'
+    derived: false
   H0:
     latex: H_0
     derived: true
-  Omega_Lambda:
-    latex: \Omega_\Lambda
-    derived: true
+  omega_b:
+    prior:
+      min: 0.005
+      max: 0.1
+    ref:
+      dist: norm
+      loc: 0.0224
+      scale: 0.0001
+    proposal: 0.0001
+    latex: \Omega_\mathrm{b} h^2
     renames:
-    - omegal
+    - omegabh2
+  omega_cdm:
+    prior:
+      min: 0.001
+      max: 0.99
+    ref:
+      dist: norm
+      loc: 0.12
+      scale: 0.001
+    proposal: 0.0005
+    latex: \Omega_\mathrm{c} h^2
+    renames:
+    - omegach2
   Omega_m:
     latex: \Omega_\mathrm{m}
     derived: true
     renames:
     - omegam
+  omegamh2:
+    derived: 'lambda Omega_m, H0: Omega_m*(H0/100)**2'
+    latex: \Omega_\mathrm{m} h^2
+  m_ncdm:
+    value: 0.06
+    renames: mnu
+  Omega_Lambda:
+    latex: \Omega_\Lambda
+    derived: true
+    renames:
+    - omegal
   YHe:
     latex: Y_\mathrm{P}
     derived: true
     renames:
-    - yhe
     - yheused
-  age:
-    latex: '{\rm{Age}}/\mathrm{Gyr}'
-    derived: true
-  clamp:
-    derived: 'lambda A_s, tau_reio: 1e9*A_s*np.exp(-2*tau_reio)'
-    latex: 10^9 A_\mathrm{s} e^{-2\tau}
-  logA:
-    drop: true
-    latex: \log(10^{10} A_\mathrm{s})
-    prior:
-      max: 3.91
-      min: 1.61
-    proposal: 0.001
-    ref:
-      dist: norm
-      loc: 3.05
-      scale: 0.001
-  m_ncdm:
-    renames: mnu
-    value: 0.06
-  n_s:
-    latex: n_\mathrm{s}
-    prior:
-      max: 1.2
-      min: 0.8
-    proposal: 0.002
-    ref:
-      dist: norm
-      loc: 0.965
-      scale: 0.004
-    renames:
-    - ns
-  omega_b:
-    latex: \Omega_\mathrm{b} h^2
-    prior:
-      max: 0.1
-      min: 0.005
-    proposal: 0.0001
-    ref:
-      dist: norm
-      loc: 0.0224
-      scale: 0.0001
-    renames:
-    - omegabh2
-  omega_cdm:
-    latex: \Omega_\mathrm{c} h^2
-    prior:
-      max: 0.99
-      min: 0.001
-    proposal: 0.0005
-    ref:
-      dist: norm
-      loc: 0.12
-      scale: 0.001
-    renames:
-    - omegach2
-  omegamh2:
-    derived: 'lambda Omega_m, H0: Omega_m*(H0/100)**2'
-    latex: \Omega_\mathrm{m} h^2
-  rs_drag:
-    latex: r_\mathrm{drag}
-    derived: true
-    renames:
-    - rdrag
-  s8h5:
-    derived: 'lambda sigma8, H0: sigma8*(H0*1e-2)**(-0.5)'
-    latex: \sigma_8/h^{0.5}
-  s8omegamp25:
-    derived: 'lambda sigma8, Omega_m: sigma8*Omega_m**0.25'
-    latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
-  s8omegamp5:
-    derived: 'lambda sigma8, Omega_m: sigma8*Omega_m**0.5'
-    latex: \sigma_8 \Omega_\mathrm{m}^{0.5}
-  sigma8:
-    latex: \sigma_8
-    derived: true
+    - yhe
   tau_reio:
-    latex: \tau_\mathrm{reio}
     prior:
-      max: 0.8
       min: 0.01
-    proposal: 0.003
+      max: 0.8
     ref:
       dist: norm
       loc: 0.055
       scale: 0.006
+    proposal: 0.003
+    latex: \tau_\mathrm{reio}
     renames:
     - tau
-  theta_s_1e2:
-    drop: true
-    latex: 100\theta_\mathrm{s}
-    prior:
-      max: 10
-      min: 0.5
-    proposal: 0.0002
-    ref:
-      dist: norm
-      loc: 1.0416
-      scale: 0.0004
   z_reio:
     latex: z_\mathrm{re}
     derived: true
     renames:
     - zrei
+  sigma8:
+    latex: \sigma_8
+    derived: true
+  s8h5:
+    derived: 'lambda sigma8, H0: sigma8*(H0*1e-2)**(-0.5)'
+    latex: \sigma_8/h^{0.5}
+  s8omegamp5:
+    derived: 'lambda sigma8, Omega_m: sigma8*Omega_m**0.5'
+    latex: \sigma_8 \Omega_\mathrm{m}^{0.5}
+  s8omegamp25:
+    derived: 'lambda sigma8, Omega_m: sigma8*Omega_m**0.25'
+    latex: \sigma_8 \Omega_\mathrm{m}^{0.25}
+  A:
+    derived: 'lambda A_s: 1e9*A_s'
+    latex: 10^9 A_\mathrm{s}
+  clamp:
+    derived: 'lambda A_s, tau_reio: 1e9*A_s*np.exp(-2*tau_reio)'
+    latex: 10^9 A_\mathrm{s} e^{-2\tau}
+  age:
+    latex: '{\rm{Age}}/\mathrm{Gyr}'
+    derived: true
+  rs_drag:
+    latex: r_\mathrm{drag}
+    derived: true
+    renames:
+    - rdrag
   A_planck:
     prior:
       dist: norm
@@ -302,6 +351,9 @@ params:
   chi2__CMB:
     latex: \chi^2_\mathrm{CMB}
     derived: true
+  chi2__BAO:
+    latex: \chi^2_\mathrm{BAO}
+    derived: true
 sampler:
   mcmc:
     burn_in: 0
@@ -310,7 +362,7 @@ sampler:
     covmat_params: null
     proposal_scale: 1.9
     output_every: 60s
-    learn_every: 20d
+    learn_every: 40d
     learn_proposal: true
     learn_proposal_Rminus1_max: 2.0
     learn_proposal_Rminus1_max_early: 30.0
@@ -328,10 +380,10 @@ sampler:
     - - 1
       - - logA
         - n_s
+        - theta_s_1e2
         - omega_b
         - omega_cdm
         - tau_reio
-        - theta_s_1e2
     - - 5
       - - A_planck
     callback_function: null
@@ -341,23 +393,5 @@ sampler:
     oversample: null
     drag_limits: null
     version: '3.0'
-post:
-  suffix: BAO
-  add:
-    likelihood:
-      bao.sdss_dr12_consensus_final: null
-      bao.sdss_dr7_mgs: null
-      bao.sixdf_2011_bao: null
-    theory:
-      classy:
-        extra_args:
-          N_ncdm: 1
-          N_ur: 2.0328
-          hmcode_min_k_max: 20
-          non linear: hmcode
-    ' params':
-      h: H0/100
-      chi2__BAO:
-        latex: chi^2_\mathrm{BAO}
 output: lcdm_highEE+lowEE+BAO
 version: '3.0'
