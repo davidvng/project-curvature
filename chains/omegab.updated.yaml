@@ -347,5 +347,7 @@ sampler:
     oversample: null
     drag_limits: null
     version: '3.0'
-output: cluster
+output: omegab
 version: '3.0'
+packages_path: null
+test: false
