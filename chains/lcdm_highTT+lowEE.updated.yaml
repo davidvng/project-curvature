@@ -193,8 +193,8 @@ params:
     latex: Y_\mathrm{P}
     derived: true
     renames:
-    - yheused
     - yhe
+    - yheused
   tau_reio:
     prior:
       min: 0.01
