@@ -256,8 +256,8 @@ params:
     latex: Y_\mathrm{P}
     derived: true
     renames:
-    - yhe
     - yheused
+    - yhe
   tau_reio:
     prior:
       min: 0.01
@@ -681,7 +681,7 @@ sampler:
     oversample: null
     drag_limits: null
     version: '3.0'
-output: flat_omegak
+output: omegak_lowEE+lowTT+highTTTEEE+lens
 version: '3.0'
 packages_path: null
 test: false
