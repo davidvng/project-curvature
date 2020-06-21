@@ -1,6 +1,6 @@
 from cobaya.yaml import yaml_load_file
 
-info_from_yaml = yaml_load_file("lcdm_highTTTEEE+lowEE.yaml")
+info_from_yaml = yaml_load_file("omegak_lowEE+lowTT+highTTTEEE+Pantheon+lens.yaml")
 
 from cobaya.run import run
 
