@@ -128,7 +128,7 @@ params:
 sampler:
   mcmc:
     learn_every: 10d
-    covmat: /home1/sarnaaik/Repo/data/planck_supp_data_and_covmats/covmats/base_omegak_plikHM_TT_lowl_lowE_BAO.covmat
+    covmat: /home1/sarnaaik/Repo/data/planck_supp_data_and_covmats/covmats/base_omegak_plikHM_TTTEEE_lowl_lowE_BAO.covmat
     drag: true
     oversample_power: 0.4
     proposal_scale: 1.9

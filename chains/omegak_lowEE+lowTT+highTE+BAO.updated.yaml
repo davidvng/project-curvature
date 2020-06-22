@@ -255,8 +255,8 @@ params:
     latex: Y_\mathrm{P}
     derived: true
     renames:
-    - yhe
     - yheused
+    - yhe
   tau_reio:
     prior:
       min: 0.01
@@ -418,17 +418,17 @@ params:
     proposal: 0.2
     latex: A^\mathrm{dustTE}_{217}
     renames: galfTE217
-  chi2__CMB:
-    latex: \chi^2_\mathrm{CMB}
-    derived: true
   chi2__BAO:
     latex: \chi^2_\mathrm{BAO}
+    derived: true
+  chi2__CMB:
+    latex: \chi^2_\mathrm{CMB}
     derived: true
 sampler:
   mcmc:
     burn_in: 0
     max_tries: 40d
-    covmat: /home1/sarnaaik/Repo/data/planck_supp_data_and_covmats/covmats/base_omegak_plikHM_TT_lowl_lowE_BAO.covmat
+    covmat: /home1/sarnaaik/Repo/data/planck_supp_data_and_covmats/covmats/base_omegak_plikHM_TTTEEE_lowl_lowE_BAO.covmat
     covmat_params: null
     proposal_scale: 1.9
     output_every: 60s
