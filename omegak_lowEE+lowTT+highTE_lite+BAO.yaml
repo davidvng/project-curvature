@@ -8,8 +8,13 @@ theory:
 likelihood:
   planck_2018_lowl.TT: null
   planck_2018_lowl.EE: null
-  planck_2018_highl_plik.TTTEEE_lite_native:
-    l_max: 800
+  planck_2018_highl_plik.TE_lite: null
+    #external: import_module('cobaya.likelihoods.planck_2018_highl_plik').TE_lite.TE_lite
+    #path: /home/davidvng/anaconda3/envs/curvature/lib/python3.8/site-packages/cobaya/likelihoods/planck_2018_highl_plik/TE_lite.py
+    #clik_file: /home/davidvng/cosmology/modules/data/planck_2018/baseline/plc_3.0/hi_l/extended_plik_lite/plik_lite_v22_TE.clik
+  bao.sixdf_2011_bao: null
+  bao.sdss_dr7_mgs: null
+  bao.sdss_dr12_consensus_bao: null
 params:
   logA:
     prior:
@@ -35,6 +40,13 @@ params:
       scale: 0.004
     proposal: 0.002
     latex: n_\mathrm{s}
+  Omega_k:
+    prior:
+      dist: uniform
+      min: -0.3
+      max: 0.3
+    proposal: 0.001
+    latex: \Omega_k
   theta_s_1e2:
     prior:
       min: 0.5
@@ -118,13 +130,13 @@ params:
     latex: r_\mathrm{drag}
 sampler:
   mcmc:
-    covmat: auto
+    learn_every: 10d
+    covmat: /home/davidvng/cosmology/modules/data/planck_supp_data_and_covmats/covmats/base_omegak_plikHM_TTTEEE_lowl_lowE_BAO.covmat
     drag: true
     oversample_power: 0.4
     proposal_scale: 1.9
     Rminus1_stop: 0.1
-    Rminus1_cl_stop: 0.2
-    Rminus1_cl_level: 0.95
-    learn_every: 10d
-    
-output: chains/lcdm_lmax800
+
+#output: chains/omegak_lowEE+lowTT+highTE+BAO
+debug: true
+debug_file: te_lite.txt
