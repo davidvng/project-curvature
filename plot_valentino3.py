@@ -12,7 +12,7 @@ from getdist import loadMCSamples
 
 # Replace chains here
 sample = loadMCSamples('chains/lcdm_lmax800', settings={'ignore_rows': 0.1})
-sample2 = loadMCSamples('chains/lcdm_lmin800', settings={'ignore_rows': 0.1})
+sample2 = loadMCSamples('chains/lcdm_lmin800_chain2', settings={'ignore_rows': 0.1})
 
 stats = sample.getMargeStats()
 stats2 = sample2.getMargeStats()
